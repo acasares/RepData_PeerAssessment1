@@ -1,13 +1,6 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 ## Introduction
 It is now possible to collect a large amount of data about personal
 movement using activity monitoring devices.
@@ -49,7 +42,8 @@ dataset.
 
 
 ## A required function
-```{r functions,echo=TRUE}
+
+```r
 interv_max <- function(means) {
     # Find the 5-minute interval that, on average, contains the maximum number of steps
     max_steps <- max(means) # Maximum number of steps in average
@@ -65,10 +59,78 @@ interv_max <- function(means) {
  }
 ```
 ## Some libraries loaded:
-```{r bibliotecas,echo=FALSE,results="hide"}
-library(dplyr)
-library(lubridate)
-library(Hmisc)
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```
+## Warning: package 'lubridate' was built under R version 3.2.5
+```
+
+```
+## 
+## Attaching package: 'lubridate'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     date
+```
+
+```
+## Warning: package 'Hmisc' was built under R version 3.2.5
+```
+
+```
+## Loading required package: lattice
+```
+
+```
+## Loading required package: survival
+```
+
+```
+## Warning: package 'survival' was built under R version 3.2.5
+```
+
+```
+## Loading required package: Formula
+```
+
+```
+## Loading required package: ggplot2
+```
+
+```
+## 
+## Attaching package: 'Hmisc'
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     combine, src, summarize
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, round.POSIXt, trunc.POSIXt, units
 ```
 
 ## Loading and preprocessing the data
@@ -76,35 +138,69 @@ library(Hmisc)
 Code for reading in the dataset and processing the data.
 The reading is done only if the data is not already loaded in memory:
 
-```{r read,echo=TRUE}
+
+```r
 if (length(grep("activity",ls(),fixed = TRUE))==0) {
     activity <- read.csv("./data/activity.csv", header=TRUE)
 }
 ```
 Processing the original data:
 Compute global parameters:
-```{r compute1,echo=TRUE}
+
+```r
 ndays <- length(levels(activity$date)) # number of days
 nobs <- nrow(activity)                 # number of observations
 l_int <- activity[2,3]-activity[1,3]   # length of one interval, in minutes
 n_5min <- 60*24 / l_int                # number of intervals per day
 print("Original activity data frame:")
+```
+
+```
+## [1] "Original activity data frame:"
+```
+
+```r
 print(summary(activity))
+```
+
+```
+##      steps                date          interval     
+##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
+##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
+##  Median :  0.00   2012-10-03:  288   Median :1177.5  
+##  Mean   : 37.38   2012-10-04:  288   Mean   :1177.5  
+##  3rd Qu.: 12.00   2012-10-05:  288   3rd Qu.:1766.2  
+##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
+##  NA's   :2304     (Other)   :15840
 ```
 ## What is "mean total number of steps taken per day"?
 It is the average sum of the number of steps taken during the 288 five-minute intervals of a day.
 To calculate it, first find the total daily steps, using the paradigm split (activity per date) + sapply, with the function sum. On this result will be based the histograms to be built later.
-```{r total1,echo=TRUE}
+
+```r
 total_daily_steps <- sapply(split(activity, activity$date),function(x) {sum(x$steps, na.rm = TRUE)})
 ```
 Then take the mean and report it an the median:
-```{r ave1,echo=TRUE}
+
+```r
 mean_total <- mean(total_daily_steps)
 print(sprintf("Mean total number of steps taken per day: %.2f",mean_total))
+```
+
+```
+## [1] "Mean total number of steps taken per day: 9354.23"
+```
+
+```r
 print(sprintf("Median total number of steps taken per day: %.2f",median(total_daily_steps)))
 ```
+
+```
+## [1] "Median total number of steps taken per day: 10395.00"
+```
 Now is as good a time as any other to create a vector with the fancy expression of intervals, to be used on the plots:
-```{r abscise,echo=TRUE}
+
+```r
 inter_5min <- matrix(0,nrow = 1,ncol = n_5min)
 nin <- 0
 for (interv in activity$interval[1:n_5min]){
@@ -117,21 +213,28 @@ for (interv in activity$interval[1:n_5min]){
 It is a time series along a day, showing the average number of steps taken on each five minute interval
 
 Find the average number of steps taken per 5-minute interval:
-```{r ave2,echo=TRUE}
+
+```r
 five_min_means <- with(activity,
             sapply(split(activity,interval),function(x) {mean(x$steps, na.rm = TRUE)}))
 ```
 Find the 5-minute interval that, on average, contains the maximum number of steps
-```{r max_5min,echo=TRUE}
+
+```r
 answ <- interv_max(five_min_means) # Function to do some interval computations
 mmx5 <- answ[[1]];hmx <- answ[[2]];mmx <- answ[[3]];hmx1 <- answ[[4]];mmx1 <- answ[[5]]
 max_abcs <- answ[[6]]
 print(sprintf("5-minute interval with the average maximum number of steps: %d:%2d - %d:%2d"
               ,hmx,mmx,hmx1,mmx1))
 ```
+
+```
+## [1] "5-minute interval with the average maximum number of steps: 8:35 - 8:40"
+```
 ## Time series plot of the average number of steps taken
 It's assumed that the average is on the number of steps by five-minute interval, along a day
-```{r plot1,echo=TRUE}
+
+```r
     #Draw the time series plot:
     par(mfrow = c(1,1))
     plot(1:n_5min,five_min_means, type='l',col='blue',xaxt = "n",ylim = c(0,250),
@@ -145,18 +248,33 @@ It's assumed that the average is on the number of steps by five-minute interval,
     abline(v = max_abcs, col ="red")
 ```
 
+![](PA1_files/figure-html/plot1-1.png)<!-- -->
+
 ## Imputing missing values
 
 Calculate and report the total number of missing values in the dataset 
-```{r missing1,echo=TRUE}
+
+```r
 print(sprintf("Number of missing values: %g",sum(is.na(activity$steps))))
+```
+
+```
+## [1] "Number of missing values: 2304"
+```
+
+```r
 perc_na <- 100*mean(is.na(activity$steps))
 print(sprintf("Percentage of missing values: %.3f %%",perc_na))
+```
+
+```
+## [1] "Percentage of missing values: 13.115 %"
 ```
 Devise a strategy for filling in all of the missing values in the dataset.
 
 Code to describe and show a strategy for imputing missing data:
-```{r missing,echo=TRUE}
+
+```r
 imputed_activity <- activity  # Initializing new dataset imputed_activity:
 # Imputing values for NA's: I prefer to use the mean of each 5 minutes interval:
 # Create a new dataset that is equal to the original dataset but with the missing data filled in.
@@ -166,18 +284,55 @@ for (irow in 1:nrow(activity)) {
     if (is.na(activity[irow,1])) {imputed_activity[irow,1] <- five_min_means[n]}
 }
 print("Imputed activity data frame:")
+```
+
+```
+## [1] "Imputed activity data frame:"
+```
+
+```r
 print(summary(imputed_activity))
+```
+
+```
+##      steps                date          interval     
+##  Min.   :  0.00   2012-10-01:  288   Min.   :   0.0  
+##  1st Qu.:  0.00   2012-10-02:  288   1st Qu.: 588.8  
+##  Median :  0.00   2012-10-03:  288   Median :1177.5  
+##  Mean   : 37.38   2012-10-04:  288   Mean   :1177.5  
+##  3rd Qu.: 27.00   2012-10-05:  288   3rd Qu.:1766.2  
+##  Max.   :806.00   2012-10-06:  288   Max.   :2355.0  
+##                   (Other)   :15840
+```
+
+```r
 # A verification:
 print(sprintf("After imputing, missing values:%.3f %%",100*mean(is.na(imputed_activity$steps))))
 ```
+
+```
+## [1] "After imputing, missing values:0.000 %"
+```
 Recalculate total number of daily steps:
-```{r total2,echo=TRUE}
+
+```r
 total_daily_steps1 <- sapply(split(imputed_activity, imputed_activity$date),
                             function(x) {sum(x$steps, na.rm = TRUE)})
 
     # Report the mean and median of the total number of steps taken per day in the imputed data: 
 print(sprintf("Median number of steps by day: %.2f",median(total_daily_steps1)))
+```
+
+```
+## [1] "Median number of steps by day: 10766.19"
+```
+
+```r
 print(sprintf("Mean number of steps by day: %.2f",mean(total_daily_steps1))) 
+```
+
+```
+## [1] "Mean number of steps by day: 10766.19"
 ```
 Imputing missing data had an impact on the estimates of the total daily number of steps:
 
@@ -186,7 +341,8 @@ strategy, have furthermore unified their value. The median has grown in 3.57% an
 in 15.09%.
 
 ## Plot two paneled histograms, with original and imputed data sets, respectively:
-```{r histog,echo=TRUE,fig.height=6}
+
+```r
 # HISTOGRAMS:
 par(mfrow = c(2,1), oma=c(1,0,3,2), mar=c(4,4,2,2))
 # 1.-Histogram of the total number of steps taken each day:
@@ -217,11 +373,14 @@ lines(c(14000,15500),c(14.5,14.5), col="red", lwd=2)
 text(x=18300, y=14.5,"median = mean")    # Explains drawn lines
 ```
 
+![](PA1_files/figure-html/histog-1.png)<!-- -->
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 I rather made two data frames, one for weekdays and another for weekends, instead of splitting
 the imputed data frame by day of the week and then by interval: it is clearer so.
-```{r patterns,echo=TRUE,fig.height=6}
+
+```r
 # Create a new data frame with a new column: day of the week
 activity1 <- mutate(imputed_activity, week_day=wday(ymd(imputed_activity$date)))
 # According to suggestion in instructions:
@@ -245,7 +404,13 @@ mmx5_wd <- answ[[1]];hmx_wd <- answ[[2]];mmx_wd <- answ[[3]];hmx1_wd <- answ[[4]
 max_abcs_wd <- answ[[6]]
 print(sprintf("5-minute interval with the average maximum number of steps in week days: %d:%2d - %d:%2d"
               ,hmx_wd,mmx_wd,hmx1_wd,mmx1_wd))
+```
 
+```
+## [1] "5-minute interval with the average maximum number of steps in week days: 8:35 - 8:40"
+```
+
+```r
 # FOR WEEKENDS
 # Find the average number of steps taken per 5-minute interval over weekends:
 prom_we <- sapply(split(act_we, act_we$interval),function(x) {
@@ -257,7 +422,13 @@ mmx5_we <- answ[[1]];hmx_we <- answ[[2]];mmx_we <- answ[[3]];hmx1_we <- answ[[4]
 max_abcs_we <- answ[[6]]
 print(sprintf("5-minute interval with the average maximum number of steps in weekends: %d:%2d - %d:%2d"
               ,hmx_we,mmx_we,hmx1_we,mmx1_we))
+```
 
+```
+## [1] "5-minute interval with the average maximum number of steps in weekends: 9:15 - 9:20"
+```
+
+```r
 #Draw the two paneled plots:
 par(mfrow = c(2,1), oma=c(1,0,3,2), mar=c(4,4,2,2))
 plot(1:n_5min,prom_wd, type='l',col='blue',xaxt = "n",ylim = c(0,250),
@@ -281,6 +452,8 @@ text(x=200,y=240,paste("Number of observations:",as.character(nwe)),cex=0.7)
 text(x=200,y=190,sprintf("Max.average of steps taken:%.2f",mmx5_we),cex=0.7)
 abline(v = max_abcs_we, col ="red")
 ```
+
+![](PA1_files/figure-html/patterns-1.png)<!-- -->
 
         (The x axis marks in the previous plots are drawn at half hour intervals).
 
