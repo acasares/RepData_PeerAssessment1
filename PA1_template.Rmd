@@ -133,7 +133,7 @@ print(sprintf("5-minute interval with the average maximum number of steps: %d:%2
 ```
 ## Time series plot of the average number of steps taken
 It's assumed that the average is on the number of steps by five-minute interval, along a day
-```{r plot1,echo=TRUE}
+```{r plot1,echo=TRUE,fig.path="./"}
     #Draw the time series plot:
     par(mfrow = c(1,1))
     plot(1:n_5min,five_min_means, type='l',col='blue',xaxt = "n",ylim = c(0,250),
@@ -188,7 +188,7 @@ strategy, have furthermore unified their value. The median has grown in 3.57% an
 in 15.09%.
 
 ## Plot two paneled histograms, with original and imputed data sets, respectively:
-```{r histog,echo=TRUE,fig.height=6}
+```{r histog,echo=TRUE,fig.height=6,fig.path="./"}
 # HISTOGRAMS:
 par(mfrow = c(2,1), oma=c(1,0,3,2), mar=c(4,4,2,2))
 # 1.-Histogram of the total number of steps taken each day:
@@ -223,7 +223,7 @@ text(x=18300, y=14.5,"median = mean")    # Explains drawn lines
 
 I rather made two data frames, one for weekdays and another for weekends, instead of splitting
 the imputed data frame by day of the week and then by interval: it is clearer so.
-```{r patterns,echo=TRUE,fig.height=6}
+```{r patterns,echo=TRUE,fig.height=6,fig.path="./"}
 # Create a new data frame with a new column: day of the week
 activity1 <- mutate(imputed_activity, week_day=wday(ymd(imputed_activity$date)))
 # According to suggestion in instructions:
