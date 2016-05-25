@@ -4,10 +4,10 @@ As elements to be reviewed by peers during this project 1 of the Reproducible Re
 
 - A previous R script, Course_project_1_RR, made in first place during tests.
 
-- The commented .rmd report built from the former: 
+- The commented PA1.rmd report built from the former: 
 
-- The .md format produced by knitr
+- The PA1.md produced by knitr
 
-- The final result produced by markdown, in html format.
+- The final result produced by markdown, in html format, PA1.html
 
 - The three figures built during the process, in png format.
