@@ -11,3 +11,5 @@ As elements to be reviewed by peers during this project 1 of the Reproducible Re
 - The final result produced by markdown, in html format, PA1.html
 
 - The three figures built during the process, in png format.
+
+To avoid confussion, all the PA1 (Rmd,md,html) files have also been submitted as PA1_template files

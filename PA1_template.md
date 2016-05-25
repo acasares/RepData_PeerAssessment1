@@ -141,8 +141,14 @@ The reading is done only if the data is not already loaded in memory:
 
 ```r
 if (length(grep("activity",ls(),fixed = TRUE))==0) {
-    activity <- read.csv("./data/activity.csv", header=TRUE)
+    print("Didn't find activity in memory")
+    filerd = "E:/Projects/RepData_PeerAssessment1-master/data/activity.csv"
+    activity <- read.csv(filerd, header=TRUE)
 }
+```
+
+```
+## [1] "Didn't find activity in memory"
 ```
 Processing the original data:
 Compute global parameters:
@@ -248,7 +254,7 @@ It's assumed that the average is on the number of steps by five-minute interval,
     abline(v = max_abcs, col ="red")
 ```
 
-![](PA1_files/figure-html/plot1-1.png)<!-- -->
+![](PA1_template_files/figure-html/plot1-1.png)<!-- -->
 
 ## Imputing missing values
 
@@ -373,7 +379,7 @@ lines(c(14000,15500),c(14.5,14.5), col="red", lwd=2)
 text(x=18300, y=14.5,"median = mean")    # Explains drawn lines
 ```
 
-![](PA1_files/figure-html/histog-1.png)<!-- -->
+![](PA1_template_files/figure-html/histog-1.png)<!-- -->
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -453,7 +459,7 @@ text(x=200,y=190,sprintf("Max.average of steps taken:%.2f",mmx5_we),cex=0.7)
 abline(v = max_abcs_we, col ="red")
 ```
 
-![](PA1_files/figure-html/patterns-1.png)<!-- -->
+![](PA1_template_files/figure-html/patterns-1.png)<!-- -->
 
         (The x axis marks in the previous plots are drawn at half hour intervals).
 

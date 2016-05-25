@@ -2,7 +2,7 @@
 title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
-    keep_md: true
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -76,9 +76,11 @@ library(Hmisc)
 Code for reading in the dataset and processing the data.
 The reading is done only if the data is not already loaded in memory:
 
-```{r read,echo=TRUE}
+```{r readcsv,echo=TRUE}
 if (length(grep("activity",ls(),fixed = TRUE))==0) {
-    activity <- read.csv("./data/activity.csv", header=TRUE)
+    print("Didn't find activity in memory")
+    filerd = "E:/Projects/RepData_PeerAssessment1-master/data/activity.csv"
+    activity <- read.csv(filerd, header=TRUE)
 }
 ```
 Processing the original data:

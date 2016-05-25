@@ -141,8 +141,14 @@ The reading is done only if the data is not already loaded in memory:
 
 ```r
 if (length(grep("activity",ls(),fixed = TRUE))==0) {
-    activity <- read.csv("./data/activity.csv", header=TRUE)
+    print("Didn't find activity in memory")
+    filerd = "E:/Projects/RepData_PeerAssessment1-master/data/activity.csv"
+    activity <- read.csv(filerd, header=TRUE)
 }
+```
+
+```
+## [1] "Didn't find activity in memory"
 ```
 Processing the original data:
 Compute global parameters:
